@@ -43,3 +43,7 @@ Options:
 pip install -e ".[dev]"
 pytest
 ```
+
+## Contributing
+
+See [CONTRIBUTING.md](CONTRIBUTING.md).
