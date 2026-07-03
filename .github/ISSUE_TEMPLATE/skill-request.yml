@@ -1,0 +1,37 @@
+name: Skill request
+description: Suggest a new rewrite rule or capability for Humanizer.
+title: "[Skill request]: "
+labels:
+  - enhancement
+  - skill-request
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for suggesting a new rewrite rule or capability. Please describe the phrasing pattern or behavior you'd like Humanizer to handle.
+  - type: textarea
+    id: description
+    attributes:
+      label: What should this skill do?
+      description: Describe the pattern, phrase, or behavior you'd like Humanizer to detect and rewrite.
+      placeholder: e.g. Detect and vary repeated use of "It is worth noting that..."
+    validations:
+      required: true
+  - type: textarea
+    id: example
+    attributes:
+      label: Example input and expected output
+      description: Provide a short before/after example.
+      placeholder: |
+        Before: "In conclusion, we utilize a plethora of tools."
+        After:  "Overall, we use a lot of tools."
+      render: text
+    validations:
+      required: true
+  - type: textarea
+    id: context
+    attributes:
+      label: Additional context
+      description: Any other context, edge cases, or links that would help implement this.
+    validations:
+      required: false
