@@ -1,0 +1,19 @@
+[project]
+name = "humanizer"
+version = "0.1.0"
+description = "Rewrite text to reduce repetitive, formulaic AI-sounding phrasing."
+requires-python = ">=3.9"
+readme = "README.md"
+
+[project.scripts]
+humanizer = "humanizer.cli:main"
+
+[project.optional-dependencies]
+dev = ["pytest"]
+
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools.packages.find]
+where = ["src"]
