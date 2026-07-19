@@ -107,4 +107,32 @@ ajouter comme choix réel, sans casser le filtre de S4 qui ne regarde que `Plani
 2. **Génération de contenu : remplacer** le scénario mono-prompt existant par un flux à 3
    personas (SEO/GEO, Copywriter, Growth) + génération d'image. L'ancien scénario
    (« Khertyx — Idée → Contenus IA ») sera mis en pause pour éviter les doublons.
-3. **S4 : diagnostiqué et corrigé** (voir section 4). Reste à confirmer l'activation.
+3. **S4 : diagnostiqué, corrigé et réactivé.** `isinvalid: false`, `isActive: true`,
+   prochaine exécution 2026-07-20 09:00 (Europe/Paris).
+
+## 6. Phase 1 réalisée — nouvelles tables dans « Khertyx — Acquisition Clients »
+
+| Table | ID | Contenu |
+|---|---|---|
+| Personas | `tblDhaySYFLsYcAmz` | 3 records déjà remplis avec les prompts système complets (voir section 7) |
+| Concurrents | `tblniG3h9j8fzk6ii` | Nom, Type (Local Bretagne/Référence nationale), Réseaux suivis, Notes de positionnement, Dernière analyse |
+| Veille Tendances | `tblfjgRlJHE154UEx` | Sujet/Format repéré, Date, Réseau, Source, Score d'impact estimé, Persona à l'origine |
+| Benchmarks Performants | `tbllyhq27XHFhfuU0` | Titre, Réseau, Lien du post, Pourquoi ça performe, Posts générés inspirés (lié à Calendrier de Contenu) |
+| Log Décisions | `tblYiFzoq9Qg7qbYw` | Date, Scénario Make, Action, Détail, Post concerné (lié à Calendrier de Contenu) |
+
+Sur la table existante « 📅 Calendrier de Contenu » : ajout du champ **Hook** (multilineText) et
+renommage du champ de lien inverse créé automatiquement en **Benchmarks liés**.
+
+**⚠️ Action manuelle restante (non automatisable via l'API Airtable disponible) :** ajouter le
+choix **« À valider »** au champ Statut existant (actuellement Brouillon/Planifié/Publié/Erreur).
+L'outil d'édition de champ ne permet pas d'ajouter une option à une liste déroulante existante —
+il faut l'ajouter à la main dans Airtable (ouvrir le champ Statut → Modifier les options →
+ajouter « À valider » entre Brouillon et Planifié, 30 secondes). Une fois fait, le Scénario D
+pourra écrire ce statut, et S4 continuera de ne regarder que « Planifié » sans rien casser.
+
+## 7. Phase 2 réalisée — 3 personas en base
+
+Les 3 prompts système (Expert SEO/GEO, Expert Copywriter, Expert Growth/Marketing IA) sont
+rédigés et stockés dans la table Personas, éditables sans toucher aux scénarios Make. Ils
+intègrent déjà la charte de contenu Khertyx (zéro jargon/anglicisme, bénéfice métier concret,
+ton pro accessible, cible généraliste entrepreneurs, formats par réseau).
