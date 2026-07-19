@@ -231,6 +231,48 @@ Point de vigilance commun aux deux scénarios : le module Gemini de grounding
 choisit d'écrire dans le texte. Fiable la plupart du temps sur les tests réalisés, mais pas garanti
 à 100 % ; à surveiller sur quelques semaines d'usage réel.
 
+## 10. Phase 3 réalisée — Scénario C (propositions stratégiques), avec deux bugs trouvés et corrigés
+
+**Scénario C — « Khertyx — Propositions Stratégiques »** (id Make `6623958`) : hebdomadaire,
+lundi 06:30 (entre B à 06:00 et D à 07:00). Récupère les 3 meilleures tendances du jour (Veille
+Tendances, triées par score), et pour chacune génère UNE idée de post concrète (titre interne,
+brief, suggestion de hook, horaire recommandé, exemples de référence) via le persona
+Growth/Marketing IA, puis crée un nouveau record `Brouillon` dans le Calendrier de Contenu — que
+le Scénario D reprendra ensuite pour rédiger le contenu complet multi-réseaux.
+
+**Deux bugs réels trouvés pendant les tests, corrigés avant de considérer le scénario fiable :**
+
+1. **Échec de génération catastrophique au 1er test.** Sur 3 idées générées, la 3ᵉ a produit une
+   boucle de répétition du modèle : ~65 Ko de JSON malformé (avec une séquence de chiffres qui
+   dérape à l'infini) recopiés à l'identique dans les 5 champs du record Airtable. Les 2 autres
+   avaient des champs manquants et un titre bien trop long. Cause identifiée : le modèle demandé,
+   `gemini-3.1-flash`, **n'existe pas** (erreur silencieuse — le module se rabat sur un
+   comportement dégradé plutôt que de refuser). Corrigé avec le vrai identifiant `gemini-3.5-flash`,
+   `thinkingBudget` désactivé, prompt resserré avec contraintes de longueur explicites par champ,
+   et suppression de l'injection du persona SEO/GEO en plus du persona Growth (trop de contexte
+   combiné pour un seul appel). Les 3 records de test corrompus ont été supprimés (calendrier +
+   Log Décisions associés).
+2. **Erreur de renumérotation après la 1ʳᵉ correction.** En retirant le module de recherche du
+   persona SEO/GEO devenu inutile, tous les modules suivants ont décalé d'un cran — mais les
+   références aux champs de la tendance (`{{3.fldevLGzmQsR0RZNN}}` etc.) pointaient encore vers
+   l'ancien numéro de module (qui désignait maintenant l'appel Gemini, pas la recherche Veille
+   Tendances). Résultat : le scénario refusait de démarrer (`Scenario validation failed - 3
+   problem(s) found`). Corrigé en réindexant vers le bon module (`{{2.fld...}}`).
+
+**État après correction (2ᵉ test réel) :** sur les 3 tendances traitées, **2 idées de bonne
+qualité ont été créées avec succès** (titres courts et pertinents, brief en 1 phrase, hook
+correct, horaire cohérent, notes propres — vérifié champ par champ, pas juste « ça a tourné »).
+La **3ᵉ a échoué et a été mise en file d'erreur (DLQ) par Make** plutôt que de corrompre des
+données — c'est le comportement de sécurité voulu, mais la cause exacte de cet échec précis n'a
+pas pu être déterminée : les outils d'API disponibles ici ne donnent pas accès au détail
+d'erreur par module d'une exécution, seulement au statut global. **À vérifier par Yannick dans
+Make** (scénario 6623958 → panneau « Incomplete Executions/DLQ ») avant de considérer ce
+scénario fiable à 100 % ; peut être une erreur transitoire (à rejouer simplement) ou un problème
+systématique à creuser.
+
+Les 2 records de test valides ont été **conservés** (pas supprimés) — ce sont deux vraies
+propositions de contenu utilisables, prêtes à être reprises par le Scénario D.
+
 ## 7. Phase 2 réalisée — 3 personas en base
 
 Les 3 prompts système (Expert SEO/GEO, Expert Copywriter, Expert Growth/Marketing IA) sont
