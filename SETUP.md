@@ -145,6 +145,60 @@ versions antérieures) :
 Gemini (point 1) est à garder à l'esprit — c'est le seul risque qui pourrait resurgir avec un
 scénario qui multiplie les appels IA par génération.
 
+## 8. Phase 3-4 réalisée — nouveau scénario de génération (3 personas + image), testé de bout en bout
+
+**Scénario créé : « Khertyx — Génération Contenu (3 Personas + Image) »** (id Make `6622279`),
+dans le même dossier que S4. Remplace l'ancien scénario mono-prompt (« Khertyx — Idée → Contenus
+IA », id `6208506`, **mis en pause** pour éviter les doublons).
+
+Flux : recherche Airtable des records `Statut = Brouillon` avec une idée renseignée → 3 appels
+Gemini chaînés (persona SEO/GEO → persona Growth/Marketing IA → persona Copywriter, chacun lisant
+son prompt système directement depuis la table Personas) → génération d'image Gemini → upload
+Google Drive → écriture des contenus + statut `À valider` dans le Calendrier de Contenu → entrée
+d'audit dans Log Décisions. Chaque étape IA a un filet de sécurité (email + note d'erreur sur le
+record si un appel échoue, sans bloquer le reste du pipeline). Planifié chaque lundi 07:00
+(Europe/Paris) — cohérent avec « génération automatique hebdo » du brief.
+
+**Changement de déclencheur en cours de route :** le scénario a d'abord été construit avec un
+webhook (comme l'ancien), mais son test s'est heurté à une limitation de l'environnement de
+développement (pas de la production) : le domaine public `hook.eu1.make.com` est bloqué par la
+politique réseau de ce sandbox, donc impossible d'y envoyer une requête de test réelle. Plutôt que
+de laisser un scénario non testé, il a été reconstruit avec un déclencheur Airtable natif
+(recherche des `Brouillon`), ce qui est à la fois testable immédiatement et plus fidèle à l'esprit
+« génération automatique » du brief qu'un bouton manuel.
+
+### Test de bout en bout réalisé (record `rec7HejtsoSeMufJR`, "TEST — Content Engine 3 Personas")
+
+Exécution réelle lancée via l'API Make (`scenarios_run`), succès confirmé. Résultat vérifié
+directement dans Airtable :
+- Hook, Contenu LinkedIn, Contenu Facebook, Contenu Instagram, Script TikTok, Premier Commentaire :
+  tous remplis, ton conforme à la charte (bénéfice concret, zéro jargon, CTA `khertyx.com/audit-gratuit`).
+- Statut passé automatiquement de `Brouillon` à `À valider`. ✅
+- Une entrée a été créée dans Log Décisions et liée au post. ✅
+- Une image a été générée et uploadée sur Google Drive, lien écrit dans « Médias (URL) ».
+
+**⚠️ Point non résolu, à traiter avant publication réelle avec image :** le lien Google Drive
+généré (`https://drive.google.com/uc?export=download&id=...`) a été testé directement — il
+renvoie **403 Forbidden sans authentification**. Les fichiers uploadés via l'API Drive sur un
+compte Gmail personnel sont privés par défaut, et aucun module Make disponible dans le package
+Google Drive ne permet de changer les permissions de partage (`ActionUploadFile`,
+`ActionUpdateFile`, `ActionGetShareLink` n'exposent pas ce réglage). Cela signifie que si S4 tente
+de publier ce post sur Instagram avant que l'image soit rendue publique, le module Instagram
+échouera (comportement déjà géré : le record passera en `Erreur`, rien ne publie un post cassé).
+C'est exactement le point que le brief signalait déjà comme « non totalement validé ».
+
+**Deux façons de le résoudre, à ton choix :**
+1. **Le plus simple, sans rien construire de plus** : pendant la validation humaine (passage de
+   `À valider` à `Planifié`), glisser directement l'image dans le champ pièce-jointe
+   « Photo / Visuel » de l'Airtable — S4 l'utilise déjà en priorité sur le champ « Médias (URL) ».
+2. **Pour une automatisation complète sans étape manuelle** : brancher un hébergeur d'images
+   réellement public (Cloudinary, imgbb, un bucket S3 public...) à la place de Google Drive — cela
+   demande un nouveau compte/clé API et une nouvelle connexion Make, non fait à ce stade en
+   l'absence d'un service déjà existant chez toi pour ça.
+
+Le record de test reste dans la base, au statut `À valider`, pour que tu puisses l'inspecter
+toi-même avant de décider de le garder, le corriger ou le supprimer.
+
 ## 7. Phase 2 réalisée — 3 personas en base
 
 Les 3 prompts système (Expert SEO/GEO, Expert Copywriter, Expert Growth/Marketing IA) sont
