@@ -279,3 +279,55 @@ Les 3 prompts système (Expert SEO/GEO, Expert Copywriter, Expert Growth/Marketi
 rédigés et stockés dans la table Personas, éditables sans toucher aux scénarios Make. Ils
 intègrent déjà la charte de contenu Khertyx (zéro jargon/anglicisme, bénéfice métier concret,
 ton pro accessible, cible généraliste entrepreneurs, formats par réseau).
+
+## 11. Phase 5 — Test de bout en bout complet (C → D), résultat
+
+Les 2 idées créées par le Scénario C (section 10) ont été reprises automatiquement par le
+Scénario D lors d'un nouveau `scenarios_run` : recherche des records `Statut = Brouillon` avec
+idée non vide → 3 appels personas → génération d'image → upload Cloudinary → écriture complète.
+
+**Résultat vérifié champ par champ sur les 2 records** (pas seulement « l'exécution a réussi ») :
+
+- Hook, Contenu LinkedIn, Contenu Facebook, Contenu Instagram, Script TikTok, Premier
+  Commentaire : tous remplis, cohérents, complets, sans répétition ni corruption — même niveau
+  de qualité que le tout premier test de D en isolation.
+- Charte de ton respectée : bénéfice métier concret (« 10h de paperasse en moins »), zéro
+  jargon/anglicisme, CTA vers `khertyx.com/audit-gratuit`, ton adapté par réseau.
+- Statut passé de `Brouillon` à `À valider` sur les deux records. ✅
+- Image générée et uploadée sur Cloudinary pour les deux (`res.cloudinary.com/fwdxpxxs/...`). ✅
+- Deux entrées Log Décisions liées à chaque record (une de C, une de D) — la traçabilité demandée
+  par le brief fonctionne. ✅
+- **`dlqCount: 0` sur cette exécution** — aucune erreur, contrairement au test isolé du Scénario C.
+
+**Conclusion : la chaîne C → D fonctionne bout en bout sans accroc.** Le seul point encore ouvert
+dans tout le pipeline est le DLQ isolé du Scénario C (section 10), qui n'est pas réapparu ici.
+
+## 12. État du projet à la fin de cette session — récapitulatif
+
+| Élément | État |
+|---|---|
+| S4 (publication) | ✅ Corrigé (2 bugs de noms de champs obsolètes), réactivé, testé |
+| Base Airtable étendue (Phase 1) | ✅ 5 nouvelles tables + champs Hook/Benchmarks liés/À valider |
+| 3 Personas (Phase 2) | ✅ Rédigés et stockés en base, éditables sans redéploiement |
+| Scénario A — Veille Concurrents | ✅ Construit, testé, actif (lundi 05:30) |
+| Scénario B — Veille Tendances | ✅ Construit, testé, actif (lundi 06:00) — données réelles conservées |
+| Scénario C — Propositions Stratégiques | ⚠️ Construit, 2 bugs corrigés, testé — 1 échec DLQ non résolu à vérifier par Yannick, actif (lundi 06:30) |
+| Scénario D+E — Génération 3 Personas + Image | ✅ Construit, testé deux fois (isolé + chaîne C→D), actif (lundi 07:00) |
+| Image hosting (Cloudinary) | ⚠️ Branché et fonctionnel côté scénario — accessibilité publique du lien non vérifiable depuis ce sandbox, à confirmer par Yannick (voir section 8) |
+| Cycle complet testé manuellement | ✅ A, B, C, D testés individuellement et C→D testé en chaîne |
+
+### Points ouverts avant la bascule complète (Phase 6 du brief)
+
+1. **Yannick doit vérifier** l'URL Cloudinary dans un navigateur (section 8) et le point DLQ du
+   Scénario C dans Make (section 10).
+2. **Le brief demande explicitement d'attendre un cycle de validation manuelle stable sur au
+   moins 2 semaines avant d'activer le rythme hebdomadaire automatique.** Or, les 4 scénarios
+   A/B/C/D sont actuellement **actifs** avec leur planification hebdomadaire (nécessaire pour les
+   avoir testés via `scenarios_run` dans cette session) — ce qui veut dire qu'ils se
+   déclencheront réellement lundi prochain à 05:30/06:00/06:30/07:00 si rien ne change d'ici là.
+   **Décision à prendre avec Yannick : les désactiver maintenant et les réactiver seulement après
+   la période de validation manuelle, ou les laisser actifs puisque les tests du jour sont
+   concluants ?** Ce n'est pas une décision que je dois prendre seul.
+3. Aucun bouton/automatisation Airtable n'a été mis en place pour déclencher C ou D à la demande
+   (ils tournent uniquement sur leur planning hebdomadaire) — à discuter si un déclenchement
+   ponctuel est souhaité en plus du rythme automatique.
