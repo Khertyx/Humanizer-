@@ -130,6 +130,21 @@ il faut l'ajouter à la main dans Airtable (ouvrir le champ Statut → Modifier 
 ajouter « À valider » entre Brouillon et Planifié, 30 secondes). Une fois fait, le Scénario D
 pourra écrire ce statut, et S4 continuera de ne regarder que « Planifié » sans rien casser.
 
+## 7bis. Diagnostic des 4 échecs DLQ de « Khertyx — Idée → Contenus IA »
+
+Historique complet des exécutions en erreur inspecté. Aucun des problèmes trouvés ne vient du
+blueprint actuel (le scénario a été modifié plusieurs fois le 25 juin, ces erreurs viennent de
+versions antérieures) :
+
+1. **Quota Gemini à 0 sur le tier gratuit** (`generativelanguage.googleapis.com/generate_content_free_tier_requests, limit: 0`) — survenu à répétition sur le modèle `gemini-2.0-flash-lite`. Le scénario utilise maintenant `gemini-3.1-flash-lite`, sur lequel des runs ont réussi ensuite. **Point de vigilance réel pour la suite** : le nouveau scénario multi-personas fera plusieurs appels Gemini par génération (3 personas + 1 image, contre 1 seul appel avant) — donc plus de risque de retomber sur une limite de quota si le plan n'est pas passé en payant. À tester avec un seul enregistrement avant de lancer un cycle hebdomadaire complet.
+2. **Erreur de mapping sur le champ Script TikTok** (`'2591' n'est pas un tableau valide`) — un ancien mapping utilisait des fonctions `trim`/`substring` qui cassaient sur une valeur inattendue. Le mapping actuel est une simple référence directe au résultat Gemini, ce bug n'existe plus dans la version en place.
+3. **401 sur un module Mistral** — le scénario utilisait Mistral à une étape antérieure de son développement, avec une connexion mal authentifiée. Le blueprint actuel n'utilise plus du tout Mistral (uniquement Gemini), ce point est obsolète.
+4. **403 « Invalid permissions… model not found »** sur un module Airtable — message d'erreur incohérent avec le module concerné (probablement un résidu d'un appel amont raté). Non reproductible dans la config actuelle.
+
+**Conclusion : rien ne bloque la construction du nouveau scénario**, mais la vigilance quota
+Gemini (point 1) est à garder à l'esprit — c'est le seul risque qui pourrait resurgir avec un
+scénario qui multiplie les appels IA par génération.
+
 ## 7. Phase 2 réalisée — 3 personas en base
 
 Les 3 prompts système (Expert SEO/GEO, Expert Copywriter, Expert Growth/Marketing IA) sont
