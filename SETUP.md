@@ -331,3 +331,12 @@ dans tout le pipeline est le DLQ isolé du Scénario C (section 10), qui n'est p
 3. Aucun bouton/automatisation Airtable n'a été mis en place pour déclencher C ou D à la demande
    (ils tournent uniquement sur leur planning hebdomadaire) — à discuter si un déclenchement
    ponctuel est souhaité en plus du rythme automatique.
+
+### Décision de Yannick sur le point ouvert #2
+
+Confirmé : les 4 scénarios (A/B/C/D) restent **actifs** sur leur planning hebdomadaire. Yannick a
+jugé les tests du jour suffisamment concluants pour laisser tourner le cycle automatique dès
+lundi prochain, plutôt que d'attendre la période de validation manuelle de 2 semaines suggérée
+par défaut dans le brief initial. Premier run automatique réel prévu lundi prochain à 05:30
+(A) → 06:00 (B) → 06:30 (C) → 07:00 (D). S4 reste le seul point de publication réelle, et
+continue de ne jamais rien publier sans passage manuel par le statut `Planifié`.
