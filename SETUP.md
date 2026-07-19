@@ -177,45 +177,30 @@ directement dans Airtable :
 - Une entrée a été créée dans Log Décisions et liée au post. ✅
 - Une image a été générée et uploadée sur Google Drive, lien écrit dans « Médias (URL) ».
 
-**⚠️ Point non résolu, à traiter avant publication réelle avec image :** le lien Google Drive
-généré (`https://drive.google.com/uc?export=download&id=...`) a été testé directement — il
-renvoie **403 Forbidden sans authentification**. Les fichiers uploadés via l'API Drive sur un
-compte Gmail personnel sont privés par défaut, et aucun module Make disponible dans le package
-Google Drive ne permet de changer les permissions de partage (`ActionUploadFile`,
-`ActionUpdateFile`, `ActionGetShareLink` n'exposent pas ce réglage). Cela signifie que si S4 tente
-de publier ce post sur Instagram avant que l'image soit rendue publique, le module Instagram
-échouera (comportement déjà géré : le record passera en `Erreur`, rien ne publie un post cassé).
-C'est exactement le point que le brief signalait déjà comme « non totalement validé ».
+**Point trouvé puis résolu :** le lien Google Drive généré (`https://drive.google.com/uc?...`) a
+été testé directement — il renvoyait **403 Forbidden sans authentification**. Les fichiers
+uploadés via l'API Drive sur un compte Gmail personnel sont privés par défaut, et aucun module
+Make du package Google Drive ne permet de changer les permissions de partage. C'est exactement le
+point que le brief signalait déjà comme « non totalement validé ».
 
-**Deux façons de le résoudre, à ton choix :**
-1. **Le plus simple, sans rien construire de plus** : pendant la validation humaine (passage de
-   `À valider` à `Planifié`), glisser directement l'image dans le champ pièce-jointe
-   « Photo / Visuel » de l'Airtable — S4 l'utilise déjà en priorité sur le champ « Médias (URL) ».
-2. **Pour une automatisation complète sans étape manuelle** : brancher un hébergeur d'images
-   réellement public (Cloudinary, imgbb, un bucket S3 public...) à la place de Google Drive — cela
-   demande un nouveau compte/clé API et une nouvelle connexion Make, non fait à ce stade en
-   l'absence d'un service déjà existant chez toi pour ça.
+**Résolu : bascule sur Cloudinary.** Yannick a autorisé une connexion Cloudinary via une demande
+d'identifiants Make (`credential-requests` — les identifiants ne passent jamais par la
+conversation, il les a saisis directement dans Make). Le module 9 du scénario 6622279 utilise
+maintenant `cloudinary:UploadResource` (upload direct du base64 renvoyé par Gemini, `file_type:
+"data"`) au lieu de Google Drive, et écrit `{{9.secure_url}}` dans « Médias (URL) » au lieu de
+`{{9.directDownloadLink}}`.
 
-Le record de test a été supprimé après vérification (contenu confirmé correct, cf. ci-dessus).
+Re-testé de bout en bout (record `rec599jACgoQz8liy`, supprimé après vérification) : le scénario
+tourne sans erreur et produit une URL du type
+`https://res.cloudinary.com/fwdxpxxs/image/upload/v.../....jpg`.
 
-### Suite décidée avec Yannick : Cloudinary plutôt que Google Drive
-
-Le lien Google Drive (403 sans authentification) n'est pas viable pour publier automatiquement.
-Décision prise : brancher **Cloudinary** (module `cloudinary:UploadResource`, upload direct du
-base64 renvoyé par Gemini, retourne une `secure_url` publique par défaut — pas de problème de
-permissions comme avec Drive).
-
-**Action requise côté Yannick (je ne peux pas créer ce compte à sa place) :**
-1. Créer un compte Cloudinary gratuit sur cloudinary.com si besoin.
-2. Autoriser la connexion via ce lien Make (les identifiants ne passent jamais par moi) :
-   https://eu1.make.com/840084/credentials-requests/inbox?requestId=24d4ef8e-fcfc-416c-b1c2-72f80d2052b8
-   — renseigner Cloud Name, API Key et API Secret (visibles sur le Dashboard Cloudinary).
-
-**Une fois la connexion autorisée**, le module 9 du scénario 6622279 (actuellement
-`google-drive:ActionUploadFile`) sera remplacé par `cloudinary:UploadResource`
-(`file_type: "data"`, `file: {{8.data}}`, `mime_type: {{8.mimeType}}`, `resourceType: "image"`),
-et le champ écrit dans « Médias (URL) » deviendra `{{9.secure_url}}` au lieu de
-`{{9.directDownloadLink}}`. Ce changement n'est pas encore fait — en attente de la connexion.
+**Point à vérifier toi-même :** je n'ai pas pu confirmer l'accessibilité publique de cette URL
+précise depuis cet environnement — la politique réseau de ce sandbox bloque `res.cloudinary.com`
+en sortie (403 renvoyé par le proxy interne du sandbox lui-même, avant même d'atteindre
+Cloudinary — contrairement au cas Google Drive où le 403 venait bien de Google). Par défaut, un
+upload Cloudinary de type `upload` (celui utilisé ici) est public sans configuration
+supplémentaire, donc ça devrait fonctionner — un test rapide d'ouverture du lien dans une fenêtre
+de navigation privée suffit à confirmer.
 
 ## 9. Phase 3 réalisée — Scénarios A (veille concurrents) et B (veille tendances), testés en direct
 
