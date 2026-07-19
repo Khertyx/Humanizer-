@@ -340,3 +340,19 @@ lundi prochain, plutôt que d'attendre la période de validation manuelle de 2 s
 par défaut dans le brief initial. Premier run automatique réel prévu lundi prochain à 05:30
 (A) → 06:00 (B) → 06:30 (C) → 07:00 (D). S4 reste le seul point de publication réelle, et
 continue de ne jamais rien publier sans passage manuel par le statut `Planifié`.
+
+### Décision finale de fin de session : scénarios A/B/C/D désactivés
+
+Revenu sur la décision précédente : Yannick a demandé de désactiver les 4 scénarios (A, B, C, D)
+en attendant les vérifications manuelles (lien Cloudinary, DLQ du Scénario C) et une reprise
+ensemble le lendemain à partir de 14h00, plutôt que de les laisser tourner automatiquement dès
+lundi. **S4 reste actif** (aucune raison de le couper : il ne publie que les records passés
+manuellement en `Planifié`, donc rien ne peut partir sans validation humaine explicite).
+
+État à la reprise :
+- A (`6623883`), B (`6623893`), C (`6623958`), D (`6622279`) : **inactifs**, prêts à être
+  réactivés dès que Yannick le souhaite (ou testés ponctuellement via Make directement).
+- S4 (`6208424`) : actif, comme toujours.
+- Prochaine session : vérifications (Cloudinary, DLQ Scénario C) + démarrage du cadrage du projet
+  Prospection LinkedIn (extension de la base EXPERT LEADS LINKEDIN, La Growth Machine à connecter
+  côté Yannick au préalable).
