@@ -196,8 +196,26 @@ C'est exactement le point que le brief signalait déjà comme « non totalement 
    demande un nouveau compte/clé API et une nouvelle connexion Make, non fait à ce stade en
    l'absence d'un service déjà existant chez toi pour ça.
 
-Le record de test reste dans la base, au statut `À valider`, pour que tu puisses l'inspecter
-toi-même avant de décider de le garder, le corriger ou le supprimer.
+Le record de test a été supprimé après vérification (contenu confirmé correct, cf. ci-dessus).
+
+### Suite décidée avec Yannick : Cloudinary plutôt que Google Drive
+
+Le lien Google Drive (403 sans authentification) n'est pas viable pour publier automatiquement.
+Décision prise : brancher **Cloudinary** (module `cloudinary:UploadResource`, upload direct du
+base64 renvoyé par Gemini, retourne une `secure_url` publique par défaut — pas de problème de
+permissions comme avec Drive).
+
+**Action requise côté Yannick (je ne peux pas créer ce compte à sa place) :**
+1. Créer un compte Cloudinary gratuit sur cloudinary.com si besoin.
+2. Autoriser la connexion via ce lien Make (les identifiants ne passent jamais par moi) :
+   https://eu1.make.com/840084/credentials-requests/inbox?requestId=24d4ef8e-fcfc-416c-b1c2-72f80d2052b8
+   — renseigner Cloud Name, API Key et API Secret (visibles sur le Dashboard Cloudinary).
+
+**Une fois la connexion autorisée**, le module 9 du scénario 6622279 (actuellement
+`google-drive:ActionUploadFile`) sera remplacé par `cloudinary:UploadResource`
+(`file_type: "data"`, `file: {{8.data}}`, `mime_type: {{8.mimeType}}`, `resourceType: "image"`),
+et le champ écrit dans « Médias (URL) » deviendra `{{9.secure_url}}` au lieu de
+`{{9.directDownloadLink}}`. Ce changement n'est pas encore fait — en attente de la connexion.
 
 ## 7. Phase 2 réalisée — 3 personas en base
 
