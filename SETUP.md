@@ -217,6 +217,35 @@ permissions comme avec Drive).
 et le champ écrit dans « Médias (URL) » deviendra `{{9.secure_url}}` au lieu de
 `{{9.directDownloadLink}}`. Ce changement n'est pas encore fait — en attente de la connexion.
 
+## 9. Phase 3 réalisée — Scénarios A (veille concurrents) et B (veille tendances), testés en direct
+
+**Scénario A — « Khertyx — Veille Concurrents »** (id Make `6623883`) : hebdomadaire, lundi 06:00
+(Europe/Paris). Parcourt tous les records de la table Concurrents, fait une recherche web réelle
+via le grounding Gemini (`google_search_context`) sur chacun, et met à jour ses « Notes de
+positionnement » (en conservant l'historique des analyses précédentes) et sa « Dernière analyse ».
+
+**Scénario B — « Khertyx — Veille Tendances »** (id Make `6623893`) : hebdomadaire, lundi 06:30.
+Une recherche web groundée (persona Growth/Marketing IA) identifie les formats qui performent
+actuellement + 3 posts de référence, puis un second appel Gemini (sans grounding, cette fois pour
+structurer proprement le texte libre) découpe le résultat en jusqu'à 3 records Veille Tendances et
+3 records Benchmarks Performants. Une entrée est aussi loguée dans Log Décisions.
+
+Les deux scénarios ont été **testés en conditions réelles** (`scenarios_run`) :
+- Scénario A : testé sur un concurrent fictif de test (Make.com, supprimé après vérification) —
+  résumé factuel généré avec sources citées, écrit correctement en base.
+- Scénario B : testé directement sur les tables réelles (pas de données de test à nettoyer,
+  contrairement à A/D) — a produit 3 tendances réelles (score 8 à 10/10, formats « avant/après
+  chiffré », « breakdown de problème métier », « coulisses ») et 3 benchmarks réels avec 2 URLs
+  sources trouvées ; le modèle a correctement laissé le 3ᵉ lien vide plutôt que d'en inventor un.
+  **Ces 6 records réels sont conservés en base** — c'est le premier cycle de veille du système,
+  pas des données de test à supprimer.
+
+Point de vigilance commun aux deux scénarios : le module Gemini de grounding
+(`createACompletionGeminiPro`) ne renvoie pas de métadonnées de citation structurées côté Make
+(pas de champ `groundingMetadata`) — les URLs sources proviennent uniquement de ce que le modèle
+choisit d'écrire dans le texte. Fiable la plupart du temps sur les tests réalisés, mais pas garanti
+à 100 % ; à surveiller sur quelques semaines d'usage réel.
+
 ## 7. Phase 2 réalisée — 3 personas en base
 
 Les 3 prompts système (Expert SEO/GEO, Expert Copywriter, Expert Growth/Marketing IA) sont
