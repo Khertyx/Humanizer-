@@ -439,3 +439,23 @@ sectorielles).
 - Décider si/quand reconsidérer un outil payant (La Growth Machine, HeyReach) pour
   l'automatisation d'envoi et les signaux LinkedIn natifs (changement de poste, interactions
   concurrents) que la V1 gratuite ne couvre pas.
+
+## Mise à jour 20/07/2026 (suite) : prompt resserré + activation réelle
+
+Prompt du scénario `6636705` resserré avec une règle stricte : chaque signal doit désigner une
+entreprise nommée individuellement (jamais un secteur ou un groupe d'entreprises), sur les deux
+appels Gemini (recherche ET structuration) — avec instruction explicite de laisser un champ vide
+plutôt que de généraliser si aucune entreprise nommée fiable n'est trouvée.
+
+**Retest réel :** les 3 nouveaux signaux sont bien des entreprises nommées individuellement :
+- **Cooperl** — recrutement d'un poste lié à l'IA/automatisation (source : Indeed)
+- **Digitaleo** — recrutement Customer Success Operations IA/no-code (source : Indeed)
+- **Cailabs** — levée de fonds de 57M€ (source directe cette fois : optics.org/news/17367, plus
+  précise que le lien de redirection Google du premier test)
+
+Les 2 anciens signaux génériques du premier test (secteur agroalimentaire groupé, secteur
+logistique) et le doublon Cailabs ont été supprimés de la base pour ne garder que les résultats
+de qualité.
+
+**Scénario laissé actif** (décision explicite de Yannick, contrairement au Content Engine) —
+prochaine exécution automatique : lundi 27/07 à 08:00 (Europe/Paris).
