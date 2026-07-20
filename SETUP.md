@@ -356,3 +356,15 @@ manuellement en `Planifié`, donc rien ne peut partir sans validation humaine ex
 - Prochaine session : vérifications (Cloudinary, DLQ Scénario C) + démarrage du cadrage du projet
   Prospection LinkedIn (extension de la base EXPERT LEADS LINKEDIN, La Growth Machine à connecter
   côté Yannick au préalable).
+
+### Vérifications post-session confirmées (reprise du lendemain)
+
+- **Cloudinary : confirmé public.** Yannick a ouvert le lien dans un navigateur, l'image s'affiche
+  sans blocage. Point définitivement clos.
+- **DLQ Scénario C : plus rien en attente.** `scenarios_get` sur `6623958` montre `dlqCount: 0`
+  (rien de bloqué actuellement) — seul `allDlqCount: 1` subsiste, qui est juste le compteur
+  historique de l'échec du 19/07 (Make expire automatiquement les entrées DLQ non traitées).
+  Rien à faire de plus ici ; à surveiller si le motif revient sur un futur run réel.
+- **La Growth Machine : pas de compte créé — Yannick cherche une option gratuite.** LGM est payant
+  (pas de vrai palier gratuit pour de l'automatisation LinkedIn en continu). Le projet Prospection
+  LinkedIn reste en pause en attendant une solution adaptée au budget.
