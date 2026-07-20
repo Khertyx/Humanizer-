@@ -459,3 +459,11 @@ de qualité.
 
 **Scénario laissé actif** (décision explicite de Yannick, contrairement au Content Engine) —
 prochaine exécution automatique : lundi 27/07 à 08:00 (Europe/Paris).
+
+## Guide utilisateur PDF (20/07/2026)
+
+Un guide PDF illustré (8 pages) a été livré à Yannick, expliquant en langage non-technique :
+vue d'ensemble des deux projets, tableau des accès directs (liens Make/Airtable réels), un
+exemple concret étape par étape pour le Content Engine et pour la Prospection LinkedIn, la
+checklist hebdomadaire, et la marche à suivre en cas de problème. Fichier non versionné dans ce
+dépôt (livrable transmis directement).
