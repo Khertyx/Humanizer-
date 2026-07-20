@@ -368,3 +368,74 @@ manuellement en `Planifié`, donc rien ne peut partir sans validation humaine ex
 - **La Growth Machine : pas de compte créé — Yannick cherche une option gratuite.** LGM est payant
   (pas de vrai palier gratuit pour de l'automatisation LinkedIn en continu). Le projet Prospection
   LinkedIn reste en pause en attendant une solution adaptée au budget.
+
+---
+
+# Prospection LinkedIn — Journal de bord (nouveau projet, 20/07/2026)
+
+Nouveau projet distinct du Content Engine, démarré à la demande de Yannick le 20/07/2026 :
+signaux d'achat, enrichissement, messages personnalisés, gestion de conversations,
+campagnes multi-comptes LinkedIn, apprentissage continu.
+
+## Contexte existant vérifié avant de construire
+
+Deux bases Airtable de prospection LinkedIn existaient déjà :
+- **« Khertyx - Prospection LinkedIn »** (`app26flEmOgKkYqqK`) : juste un scoring de prospects
+  (signaux en checkbox : croissance, poste à risque admin, digitalisation absente...), aucune
+  automatisation Make branchée dessus.
+- **« EXPERT LEADS LINKEDIN »** (`app9FhDAsMK0GoIZU`) : pipeline Make **déjà opérationnel** —
+  table `🎯 Leads` avec un champ Statut qui pilote une automatisation réelle (connexion envoyée →
+  acceptée → message envoyé → réponse → RDV), un tableau de modèles de messages, des paramètres,
+  et un journal d'exécution. Décision : construire par-dessus cette base.
+
+## Décisions prises avec Yannick
+
+1. **Base cible : EXPERT LEADS LINKEDIN**, étendue sans toucher au pipeline `🎯 Leads` existant.
+2. **La Growth Machine envisagé puis écarté** : pas de compte existant, pas de budget pour l'instant
+   (LGM n'a pas de palier gratuit soutenable pour de l'automatisation LinkedIn). V1 gratuite retenue.
+3. **V1 gratuite** : veille de signaux publics (levées de fonds, recrutements, actualités) via
+   Gemini + recherche web (même technique que les Scénarios A/B du Content Engine) + génération de
+   messages personnalisés — **envoi manuel par Yannick**, aucun envoi ni automatisation LinkedIn
+   réelle. Ciblage : PME/artisans/commerçants en Bretagne, identique au Content Engine.
+4. **Sécurité vis-à-vis du pipeline existant** : nouvelle table séparée créée
+   (`🔍 Signaux Prospection`, id `tbl9FqcTwBAk17qGI`), n'écrit jamais dans le champ Statut de
+   `🎯 Leads` ni dans aucun champ qui déclencherait l'automatisation Make déjà en place. Un champ
+   de lien optionnel (`Lead lié`) permet de rattacher manuellement un signal à un lead existant,
+   sans automatisation.
+
+## Scénario créé et testé : « Prospection — Veille Signaux Bretagne (gratuit) »
+
+Id Make `6636705`, hebdomadaire (lundi 08:00 Europe/Paris — après les Scénarios A/B/C/D du
+Content Engine dans la même matinée). Flux :
+1. Recherche web groundée (Gemini) : signaux d'achat pour PME/artisans/commerçants bretons.
+2. Structuration (2ᵉ appel Gemini, sans grounding) en jusqu'à 3 signaux, chacun avec un message
+   LinkedIn personnalisé (ton pro, question ouverte en fin, sans lien direct, zéro jargon).
+3. Écriture dans `🔍 Signaux Prospection`, statut `Nouveau` — à relire et envoyer à la main.
+
+**Testé en conditions réelles (`scenarios_run`), résultat vérifié champ par champ :**
+3 signaux réels et factuellement corrects créés :
+- Secteur agroalimentaire breton (Bigard, Sill, Lactalis...) — recrutement
+- PME logistique en Bretagne — actualité pertinente
+- **Cailabs** (scale-up rennaise) — levée de fonds de 57M€, message personnalisé référençant le
+  montant exact
+
+Chaque signal a une source citée (lien de citation Google via le grounding Gemini). Messages
+cohérents, sans répétition/corruption, conformes aux consignes. `dlqCount: 0` — run propre du
+premier coup (contrairement au Scénario C du Content Engine qui avait eu 2 bugs).
+
+**Point d'amélioration identifié :** les signaux 1 et 2 visent des secteurs/groupes d'entreprises
+plutôt que des entreprises précises et identifiables individuellement (contrairement au signal 3,
+Cailabs, nommément identifié) — moins actionnable pour une prospection 1-to-1 ciblée. À affiner
+si besoin (ex : demander explicitement des noms d'entreprises précis plutôt que des tendances
+sectorielles).
+
+**Scénario désactivé après test**, par cohérence avec la prudence appliquée au Content Engine —
+à réactiver quand Yannick sera prêt à valider quelques cycles.
+
+## Prochaines étapes possibles (non commencées)
+
+- Affiner le ciblage pour obtenir plus d'entreprises nommées individuellement.
+- Enrichissement automatique (secteur, taille, contexte) si un signal est retenu.
+- Décider si/quand reconsidérer un outil payant (La Growth Machine, HeyReach) pour
+  l'automatisation d'envoi et les signaux LinkedIn natifs (changement de poste, interactions
+  concurrents) que la V1 gratuite ne couvre pas.
