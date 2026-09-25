@@ -1,0 +1,562 @@
+<title>Audit gratuit Khertyx</title>
+<meta name="description" content="Audit gratuit en 2 minutes : découvrez combien d'heures votre entreprise perd chaque semaine en tâches répétitives, et ce que l'automatisation peut vous rendre.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..800&family=Source+Sans+3:wght@400;600;700&family=IBM+Plex+Mono:wght@500;600&display=swap">
+<style>
+  :root {
+    --ink: #16303F;          /* bleu ardoise, granit breton */
+    --ink-soft: #4A6070;
+    --paper: #F2F4F3;
+    --sheet: #FFFFFF;
+    --line: #D5DCDD;
+    --ochre: #D9961F;        /* crayon de charpentier */
+    --ochre-ink: #7A4D00;
+    --ochre-wash: #FBEFD6;
+    --moss: #2F6B4E;
+    --moss-wash: #E1EFE7;
+    --focus: #1D6FA3;
+    --display: "Archivo", "Arial Narrow", "Helvetica Neue", Arial, sans-serif;
+    --body: "Source Sans 3", "Segoe UI", system-ui, -apple-system, sans-serif;
+    --mono: "IBM Plex Mono", ui-monospace, "SFMono-Regular", Menlo, monospace;
+    --radius: 6px;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      color-scheme: dark;
+      --ink: #E4ECEF; --ink-soft: #9FB2BD; --paper: #0F1B22; --sheet: #16252E;
+      --line: #2A3D48; --ochre: #F0B243; --ochre-ink: #F6C66A; --ochre-wash: #33280F;
+      --moss: #74C299; --moss-wash: #17322A; --focus: #6DB6E6;
+    }
+  }
+  :root[data-theme="dark"] {
+    color-scheme: dark;
+    --ink: #E4ECEF; --ink-soft: #9FB2BD; --paper: #0F1B22; --sheet: #16252E;
+    --line: #2A3D48; --ochre: #F0B243; --ochre-ink: #F6C66A; --ochre-wash: #33280F;
+    --moss: #74C299; --moss-wash: #17322A; --focus: #6DB6E6;
+  }
+
+  * { box-sizing: border-box; }
+  body {
+    background: var(--paper); color: var(--ink);
+    font: 400 1.0625rem/1.6 var(--body);
+    padding-inline: clamp(16px, 4vw, 48px);
+    -webkit-font-smoothing: antialiased;
+  }
+  .wrap { max-width: 1140px; margin-inline: auto; }
+  h1, h2, h3 { font-family: var(--display); line-height: 1.08; text-wrap: balance; margin: 0; }
+  h1 { font-size: clamp(2.3rem, 5.6vw, 4.1rem); font-weight: 800; font-stretch: 112%; letter-spacing: -0.015em; }
+  h2 { font-size: clamp(1.7rem, 3.4vw, 2.5rem); font-weight: 750; font-stretch: 108%; }
+  h3 { font-size: 1.2rem; font-weight: 700; font-stretch: 100%; }
+  p { margin: 0; }
+  a { color: inherit; }
+  :focus-visible { outline: 3px solid var(--focus); outline-offset: 2px; border-radius: 3px; }
+  .eyebrow {
+    font: 600 0.78rem/1 var(--mono); text-transform: uppercase; letter-spacing: 0.1em;
+    color: var(--ochre-ink);
+  }
+  .lead { font-size: 1.2rem; color: var(--ink-soft); max-width: 34ch; }
+  .num { font-family: var(--mono); font-variant-numeric: tabular-nums; }
+
+  /* Barre du haut */
+  .top { display: flex; align-items: center; justify-content: space-between; gap: 16px; padding-block: 22px; }
+  .brand { font: 800 1.35rem/1 var(--display); font-stretch: 125%; letter-spacing: 0.02em; text-decoration: none; }
+  .brand span { color: var(--ochre); }
+  .top-meta { font-size: 0.95rem; color: var(--ink-soft); }
+
+  /* Hero */
+  .hero { display: grid; grid-template-columns: 1fr minmax(0, 520px); gap: clamp(28px, 5vw, 64px); align-items: start; padding-block: clamp(20px, 5vw, 56px) clamp(48px, 7vw, 88px); }
+  .hero-text { display: grid; gap: 22px; padding-top: 12px; }
+  .hero h1 em { font-style: normal; background: linear-gradient(transparent 62%, var(--ochre-wash) 62%); padding-inline: 2px; }
+  .proof { display: grid; grid-template-columns: repeat(3, auto); gap: 8px 28px; justify-content: start; margin-top: 8px; padding-top: 22px; border-top: 1px solid var(--line); }
+  .proof b { display: block; font: 600 1.7rem/1.1 var(--mono); font-variant-numeric: tabular-nums; }
+  .proof small { font-size: 0.9rem; color: var(--ink-soft); }
+
+  /* Carte d'audit, façon fiche de temps */
+  .audit { background: var(--sheet); border: 1px solid var(--line); border-radius: var(--radius); box-shadow: 0 1px 0 var(--line), 0 18px 40px -24px rgba(22, 48, 63, 0.35); overflow: hidden; }
+  .audit-head { display: flex; justify-content: space-between; align-items: center; gap: 12px; padding: 14px 22px; border-bottom: 1px dashed var(--line); font: 500 0.82rem/1 var(--mono); color: var(--ink-soft); }
+  .progress { height: 4px; background: var(--line); }
+  .progress i { display: block; height: 100%; width: 0; background: var(--ochre); transition: width .35s ease; }
+  .audit-body { padding: 24px 22px 22px; display: grid; gap: 18px; }
+  .q-title { font: 700 1.3rem/1.25 var(--display); font-stretch: 100%; text-wrap: balance; }
+  .q-help { color: var(--ink-soft); font-size: 0.97rem; margin-top: -8px; }
+  .choices { display: grid; gap: 10px; }
+  .choice {
+    display: flex; align-items: center; gap: 12px; width: 100%; text-align: left;
+    padding: 13px 16px; border: 1px solid var(--line); border-radius: var(--radius);
+    background: transparent; color: var(--ink); font: inherit; font-size: 1rem; cursor: pointer;
+    transition: border-color .15s, background .15s;
+  }
+  .choice:hover { border-color: var(--ochre); background: var(--ochre-wash); }
+  .choice .k { flex: none; width: 26px; height: 26px; display: grid; place-items: center; border: 1px solid var(--line); border-radius: 4px; font: 600 0.8rem/1 var(--mono); color: var(--ink-soft); }
+  .choice[aria-pressed="true"] { border-color: var(--ochre); background: var(--ochre-wash); }
+  .choice[aria-pressed="true"] .k { background: var(--ochre); border-color: var(--ochre); color: #1B1200; }
+  .audit-foot { display: flex; justify-content: space-between; align-items: center; gap: 12px; }
+  .link-btn { background: none; border: 0; padding: 6px 0; color: var(--ink-soft); font: inherit; font-size: 0.95rem; cursor: pointer; text-decoration: underline; text-underline-offset: 3px; }
+  .link-btn:disabled { visibility: hidden; }
+
+  .btn {
+    display: inline-flex; align-items: center; justify-content: center; gap: 10px;
+    padding: 14px 22px; border-radius: var(--radius); border: 0; cursor: pointer;
+    background: var(--ink); color: var(--paper); font: 700 1rem/1 var(--body); text-decoration: none;
+    transition: transform .15s;
+  }
+  .btn:hover { transform: translateY(-1px); }
+  .btn.ochre { background: var(--ochre); color: #1B1200; }
+  .btn.ghost { background: transparent; color: var(--ink); border: 1px solid var(--ink); }
+
+  /* Résultat */
+  .result { display: grid; gap: 18px; }
+  .big { display: flex; align-items: baseline; gap: 10px; flex-wrap: wrap; }
+  .big b { font: 600 clamp(3rem, 9vw, 4.4rem)/1 var(--mono); font-variant-numeric: tabular-nums; color: var(--ochre-ink); }
+  .big span { font-size: 1.05rem; color: var(--ink-soft); max-width: 22ch; line-height: 1.35; }
+  .bars { display: grid; gap: 10px; }
+  .bar { display: grid; grid-template-columns: 9.5rem 1fr 3.4rem; gap: 12px; align-items: center; font-size: 0.95rem; }
+  .bar .track { height: 10px; background: var(--line); border-radius: 5px; overflow: hidden; }
+  .bar .fill { height: 100%; background: var(--ochre); border-radius: 5px; }
+  .bar .v { text-align: right; font: 500 0.88rem/1 var(--mono); font-variant-numeric: tabular-nums; color: var(--ink-soft); }
+  .prio { display: grid; gap: 8px; padding: 14px 16px; background: var(--moss-wash); border-radius: var(--radius); }
+  .prio h3 { font-size: 1rem; color: var(--moss); }
+  .prio ul { margin: 0; padding-left: 1.1em; display: grid; gap: 6px; }
+  .note { font-size: 0.85rem; color: var(--ink-soft); }
+
+  form.lead-form { display: grid; gap: 12px; padding-top: 16px; border-top: 1px dashed var(--line); }
+  .row2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  label.f { display: grid; gap: 5px; font-size: 0.9rem; font-weight: 600; }
+  input[type="text"], input[type="email"], input[type="tel"] {
+    font: inherit; font-size: 1rem; padding: 11px 12px; border: 1px solid var(--line); border-radius: var(--radius);
+    background: var(--paper); color: var(--ink); width: 100%;
+  }
+  .consent { display: flex; gap: 10px; align-items: flex-start; font-size: 0.87rem; color: var(--ink-soft); }
+  .consent input { margin-top: 4px; accent-color: var(--ochre); }
+  .form-msg { font-size: 0.95rem; padding: 12px 14px; border-radius: var(--radius); background: var(--moss-wash); color: var(--moss); }
+  .form-msg.err { background: var(--ochre-wash); color: var(--ochre-ink); }
+
+  /* Sections */
+  section.block { padding-block: clamp(56px, 8vw, 96px); border-top: 1px solid var(--line); }
+  .sec-head { display: grid; gap: 12px; max-width: 640px; margin-bottom: 40px; }
+
+  .gets { display: grid; grid-template-columns: repeat(3, 1fr); gap: clamp(20px, 3vw, 40px); }
+  .get { display: grid; gap: 10px; align-content: start; }
+  .get .tag { font: 600 0.78rem/1 var(--mono); color: var(--moss); text-transform: uppercase; letter-spacing: 0.08em; }
+  .get p { color: var(--ink-soft); }
+
+  .steps { display: grid; grid-template-columns: repeat(3, 1fr); gap: 0; counter-reset: s; }
+  .step { padding: 0 28px 0 0; display: grid; gap: 10px; align-content: start; position: relative; }
+  .step + .step { padding-left: 28px; border-left: 1px dashed var(--line); }
+  .step .n { font: 600 0.85rem/1 var(--mono); color: var(--ochre-ink); }
+  .step .dur { font: 500 0.82rem/1 var(--mono); color: var(--ink-soft); }
+  .step p { color: var(--ink-soft); }
+
+  /* Exemple avant / après */
+  .case { display: grid; grid-template-columns: 1fr 1fr; background: var(--sheet); border: 1px solid var(--line); border-radius: var(--radius); overflow: hidden; }
+  .case-col { padding: clamp(20px, 3vw, 32px); display: grid; gap: 14px; align-content: start; }
+  .case-col + .case-col { border-left: 1px solid var(--line); background: var(--moss-wash); }
+  .case-col h3 { display: flex; justify-content: space-between; gap: 12px; align-items: baseline; }
+  .case-col h3 .num { font-size: 0.95rem; font-weight: 500; color: var(--ink-soft); }
+  .case ul { list-style: none; margin: 0; padding: 0; display: grid; gap: 0; }
+  .case li { display: grid; grid-template-columns: 1fr auto; gap: 12px; padding-block: 10px; border-bottom: 1px dashed var(--line); }
+  .case li:last-child { border-bottom: 0; }
+  .case li .num { color: var(--ink-soft); font-size: 0.92rem; }
+  .case-col + .case-col li .num { color: var(--moss); }
+  .case-caption { margin-top: 14px; font-size: 0.88rem; color: var(--ink-soft); }
+
+  .trust { display: grid; grid-template-columns: 1.1fr 1fr; gap: clamp(24px, 5vw, 64px); align-items: start; }
+  .trust ul { margin: 0; padding: 0; list-style: none; display: grid; gap: 14px; }
+  .trust li { display: grid; grid-template-columns: 22px 1fr; gap: 12px; }
+  .trust li svg { margin-top: 4px; color: var(--moss); }
+
+  .faq { display: grid; gap: 0; max-width: 780px; }
+  .faq details { border-bottom: 1px solid var(--line); padding-block: 18px; }
+  .faq summary { cursor: pointer; font: 700 1.1rem/1.3 var(--display); font-stretch: 100%; list-style: none; display: flex; justify-content: space-between; gap: 16px; }
+  .faq summary::-webkit-details-marker { display: none; }
+  .faq summary::after { content: "+"; font-family: var(--mono); color: var(--ochre-ink); }
+  .faq details[open] summary::after { content: "–"; }
+  .faq details p { margin-top: 10px; color: var(--ink-soft); max-width: 65ch; }
+
+  .final { background: var(--ink); color: var(--paper); border-radius: var(--radius); padding: clamp(28px, 5vw, 56px); display: grid; grid-template-columns: 1fr auto; gap: 24px; align-items: center; margin-block: clamp(40px, 6vw, 72px); }
+  .final h2 { color: var(--paper); }
+  .final p { color: color-mix(in srgb, var(--paper) 78%, var(--ink)); margin-top: 10px; }
+  .final .btn.ochre { white-space: nowrap; }
+
+  footer { padding-block: 28px 40px; display: flex; flex-wrap: wrap; justify-content: space-between; gap: 12px; font-size: 0.9rem; color: var(--ink-soft); border-top: 1px solid var(--line); }
+
+  @media (max-width: 900px) {
+    .hero, .trust { grid-template-columns: 1fr; }
+    .gets, .steps { grid-template-columns: 1fr; gap: 28px; }
+    .step, .step + .step { padding: 0 0 0 18px; border-left: 2px solid var(--line); }
+    .final { grid-template-columns: 1fr; }
+  }
+  @media (max-width: 560px) {
+    .case { grid-template-columns: 1fr; }
+    .case-col + .case-col { border-left: 0; border-top: 1px solid var(--line); }
+    .row2 { grid-template-columns: 1fr; }
+    .proof { grid-template-columns: 1fr 1fr; }
+    .bar { grid-template-columns: 7.2rem 1fr 3rem; }
+    .top-meta { display: none; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    * { transition: none !important; }
+  }
+</style>
+
+<div class="wrap">
+  <header class="top">
+    <a class="brand" href="https://www.khertyx.com">KHERTYX<span>.</span></a>
+    <p class="top-meta">Automatisation &amp; IA pour PME et artisans · Près de Rennes</p>
+  </header>
+
+  <main>
+    <section class="hero" id="audit">
+      <div class="hero-text">
+        <p class="eyebrow">Audit gratuit · 2 minutes · sans engagement</p>
+        <h1>Combien d'heures perdez-vous <em>chaque semaine</em>&nbsp;?</h1>
+        <p class="lead">Devis, relances, saisies en double, publications… Répondez à 6 questions et voyez tout de suite le temps que votre entreprise peut récupérer.</p>
+        <div class="proof">
+          <div><b class="num">15 h</b><small>rendues chaque semaine, au maximum</small></div>
+          <div><b class="num">−90 %</b><small>d'erreurs de saisie</small></div>
+          <div><b class="num">&lt; 2 mois</b><small>pour rentabiliser</small></div>
+        </div>
+      </div>
+
+      <div class="audit" aria-live="polite">
+        <div class="audit-head">
+          <span id="step-label">Question 1 / 6</span>
+          <span>Fiche d'audit Khertyx</span>
+        </div>
+        <div class="progress"><i id="progress-fill"></i></div>
+        <div class="audit-body" id="audit-body"></div>
+      </div>
+    </section>
+
+    <section class="block">
+      <div class="sec-head">
+        <p class="eyebrow">Ce que vous obtenez</p>
+        <h2>Un diagnostic concret, pas une plaquette commerciale</h2>
+      </div>
+      <div class="gets">
+        <div class="get">
+          <span class="tag">Tout de suite</span>
+          <h3>Votre temps perdu, chiffré</h3>
+          <p>Le nombre d'heures englouties chaque semaine par l'administratif, les relances et la double saisie, poste par poste.</p>
+        </div>
+        <div class="get">
+          <span class="tag">Sous 48 h</span>
+          <h3>Vos 3 chantiers prioritaires</h3>
+          <p>Un plan clair : quoi automatiser en premier, avec quels outils (Make, Airtable) et combien de temps cela vous rend.</p>
+        </div>
+        <div class="get">
+          <span class="tag">Si vous le souhaitez</span>
+          <h3>30 minutes avec Yannick</h3>
+          <p>Un échange au téléphone ou en visio pour passer votre situation en revue. Vous repartez avec des pistes, même sans suite.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="block">
+      <div class="sec-head">
+        <p class="eyebrow">Comment ça se passe</p>
+        <h2>Trois étapes, et vous gardez la main</h2>
+      </div>
+      <div class="steps">
+        <div class="step">
+          <span class="n">Étape 1</span>
+          <h3>Vous répondez aux 6 questions</h3>
+          <span class="dur">2 min</span>
+          <p>Aucune donnée sensible demandée. Votre estimation s'affiche à l'écran immédiatement.</p>
+        </div>
+        <div class="step">
+          <span class="n">Étape 2</span>
+          <h3>On analyse votre fonctionnement</h3>
+          <span class="dur">48 h ouvrées</span>
+          <p>Si vous laissez vos coordonnées, vous recevez par e-mail votre plan d'action personnalisé.</p>
+        </div>
+        <div class="step">
+          <span class="n">Étape 3</span>
+          <h3>Vous décidez</h3>
+          <span class="dur">sans engagement</span>
+          <p>Vous appliquez le plan seul, ou vous nous confiez la mise en place. Aucune relance insistante.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="block">
+      <div class="sec-head">
+        <p class="eyebrow">Exemple type</p>
+        <h2>Une semaine dans une menuiserie de 4 personnes</h2>
+      </div>
+      <div class="case">
+        <div class="case-col">
+          <h3>Avant <span class="num">≈ 13 h / semaine</span></h3>
+          <ul>
+            <li><span>Devis retapés sur Word, le soir</span><span class="num">4 h</span></li>
+            <li><span>Factures et relances d'impayés</span><span class="num">3 h</span></li>
+            <li><span>Mêmes infos client saisies 3 fois</span><span class="num">3 h</span></li>
+            <li><span>Rappeler les demandes de devis</span><span class="num">2 h</span></li>
+            <li><span>Chercher un document, un contact</span><span class="num">1 h</span></li>
+          </ul>
+        </div>
+        <div class="case-col">
+          <h3>Après <span class="num">≈ 2 h / semaine</span></h3>
+          <ul>
+            <li><span>Devis générés depuis une fiche Airtable</span><span class="num">45 min</span></li>
+            <li><span>Relances envoyées automatiquement à J+7, J+15</span><span class="num">0 h</span></li>
+            <li><span>Une seule saisie, partout à jour</span><span class="num">15 min</span></li>
+            <li><span>Accusé de réception en 3 minutes, même le week-end</span><span class="num">0 h</span></li>
+            <li><span>Tout retrouvé en une recherche</span><span class="num">1 h</span></li>
+          </ul>
+        </div>
+      </div>
+      <p class="case-caption">Exemple illustratif construit à partir de situations courantes chez les artisans. Vos chiffres réels sortent de votre audit.</p>
+    </section>
+
+    <section class="block">
+      <div class="trust">
+        <div class="sec-head" style="margin-bottom:0">
+          <p class="eyebrow">Vos données</p>
+          <h2>Vos informations restent les vôtres</h2>
+          <p class="lead" style="max-width:40ch">Nous travaillons dans le respect du RGPD et des recommandations de la CNIL, pour l'audit comme pour les systèmes que nous installons.</p>
+        </div>
+        <ul>
+          <li><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg><span><strong>Aucune donnée client demandée.</strong> L'audit porte sur votre façon de travailler, pas sur vos fichiers.</span></li>
+          <li><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg><span><strong>Pas de revente, pas de liste de diffusion.</strong> Vos coordonnées servent uniquement à vous envoyer votre plan.</span></li>
+          <li><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg><span><strong>Suppression sur simple demande.</strong> Un e-mail suffit, sans justification.</span></li>
+          <li><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg><span><strong>Hébergement privilégié en Europe</strong> pour les outils que nous mettons en place.</span></li>
+        </ul>
+      </div>
+    </section>
+
+    <section class="block">
+      <div class="sec-head">
+        <p class="eyebrow">Questions fréquentes</p>
+        <h2>Avant de vous lancer</h2>
+      </div>
+      <div class="faq">
+        <details><summary>C'est vraiment gratuit ?</summary><p>Oui. L'audit, le plan d'action et l'échange de 30 minutes sont offerts. Vous ne payez que si vous décidez ensuite de nous confier la mise en place.</p></details>
+        <details><summary>Je ne suis pas à l'aise avec l'informatique. C'est pour moi ?</summary><p>C'est justement pour vous. Nos clients sont des artisans, des commerçants et des dirigeants de PME. Le plan est écrit en français courant, sans jargon, et chaque automatisation est pensée pour que vous n'ayez rien à apprendre de compliqué.</p></details>
+        <details><summary>Faut-il changer tous mes logiciels ?</summary><p>Non. Dans la plupart des cas, on relie les outils que vous utilisez déjà (messagerie, agenda, logiciel de facturation, tableur) pour qu'ils se parlent entre eux.</p></details>
+        <details><summary>Combien coûte une automatisation ensuite ?</summary><p>Cela dépend du chantier. Le plan vous indique pour chaque piste le temps gagné, ce qui permet de voir si l'investissement se rembourse. Nos projets sont en général rentabilisés en moins de 2 mois.</p></details>
+        <details><summary>Vous intervenez où ?</summary><p>L'agence est basée en Bretagne, près de Rennes. Nous accompagnons des entreprises dans toute la France, à distance ou sur place selon le projet.</p></details>
+      </div>
+    </section>
+
+    <section class="final">
+      <div>
+        <h2>Vos soirées valent mieux que vos factures.</h2>
+        <p>2 minutes pour savoir combien d'heures vous pouvez récupérer.</p>
+      </div>
+      <a class="btn ochre" href="#audit" id="restart-cta">Faire mon audit gratuit</a>
+    </section>
+  </main>
+
+  <footer>
+    <span>© Khertyx · Automatisation &amp; IA · Bretagne</span>
+    <a href="https://www.khertyx.com">www.khertyx.com</a>
+  </footer>
+</div>
+
+<script>
+  // Webhook Make qui reçoit les demandes d'audit (laisser vide = mode démo).
+  const WEBHOOK_URL = "";
+
+  const QUESTIONS = [
+    { id: "secteur", title: "Quelle est votre activité ?", help: "Pour adapter les exemples à votre métier.",
+      choices: [
+        { label: "Artisan du bâtiment", v: "btp" },
+        { label: "Commerce ou restauration", v: "commerce" },
+        { label: "PME de services", v: "services" },
+        { label: "PMI, atelier, production", v: "industrie" } ] },
+    { id: "equipe", title: "Combien de personnes dans l'entreprise ?",
+      choices: [
+        { label: "Je suis seul(e)", v: 1, mult: 0.8 },
+        { label: "2 à 5 personnes", v: 2, mult: 1 },
+        { label: "6 à 20 personnes", v: 3, mult: 1.25 },
+        { label: "Plus de 20 personnes", v: 4, mult: 1.45 } ] },
+    { id: "devis", cat: "admin", title: "Comment faites-vous vos devis et factures ?",
+      choices: [
+        { label: "À la main, sur Word ou Excel", h: 4.5 },
+        { label: "Avec un logiciel, mais je ressaisis les infos", h: 2.5 },
+        { label: "Tout est relié, presque rien à ressaisir", h: 0.5 } ] },
+    { id: "relances", cat: "commercial", title: "Et les relances (devis en attente, impayés, prospects) ?",
+      choices: [
+        { label: "Je n'ai jamais le temps de les faire", h: 3.5 },
+        { label: "Je les fais moi-même, un par un", h: 3 },
+        { label: "Elles partent automatiquement", h: 0.3 } ] },
+    { id: "saisie", cat: "donnees", title: "Saisissez-vous la même information à plusieurs endroits ?",
+      help: "Par exemple un nouveau client : dans le carnet, le tableur, puis le logiciel de facturation.",
+      choices: [
+        { label: "Oui, tout le temps", h: 3.5 },
+        { label: "De temps en temps", h: 1.5 },
+        { label: "Presque jamais", h: 0.3 } ] },
+    { id: "reseaux", cat: "visibilite", title: "Où en êtes-vous sur les réseaux sociaux ?",
+      choices: [
+        { label: "Je ne publie presque rien, faute de temps", h: 1.5, vis: true },
+        { label: "Je publie, mais ça me prend des heures", h: 3 },
+        { label: "C'est organisé et régulier", h: 0.5 } ] }
+  ];
+
+  const CATS = {
+    admin:      { label: "Devis & factures", tip: "Générer devis et factures depuis une seule fiche client : fini les soirées sur Word." },
+    commercial: { label: "Relances", tip: "Relancer automatiquement devis et impayés à J+7 et J+15, sans ouvrir votre PC." },
+    donnees:    { label: "Double saisie", tip: "Centraliser vos clients dans Airtable pour ne saisir chaque information qu'une fois." },
+    visibilite: { label: "Réseaux sociaux", tip: "Un assistant IA qui prépare vos publications à partir de vos photos de chantier." }
+  };
+
+  const answers = {};
+  let step = 0;
+  const body = document.getElementById("audit-body");
+  const stepLabel = document.getElementById("step-label");
+  const fill = document.getElementById("progress-fill");
+
+  function el(tag, attrs = {}, html = "") {
+    const n = document.createElement(tag);
+    Object.entries(attrs).forEach(([k, v]) => n.setAttribute(k, v));
+    if (html) n.innerHTML = html;
+    return n;
+  }
+
+  function renderQuestion() {
+    const q = QUESTIONS[step];
+    stepLabel.textContent = `Question ${step + 1} / ${QUESTIONS.length}`;
+    fill.style.width = `${(step / QUESTIONS.length) * 100}%`;
+    body.innerHTML = "";
+    body.append(el("p", { class: "q-title", id: "q-title" }, q.title));
+    if (q.help) body.append(el("p", { class: "q-help" }, q.help));
+    const list = el("div", { class: "choices", role: "group", "aria-labelledby": "q-title" });
+    q.choices.forEach((c, i) => {
+      const b = el("button", { type: "button", class: "choice", id: `c-${q.id}-${i}`,
+        "aria-pressed": answers[q.id] === i ? "true" : "false" },
+        `<span class="k">${String.fromCharCode(65 + i)}</span><span>${c.label}</span>`);
+      b.addEventListener("click", () => {
+        answers[q.id] = i;
+        b.setAttribute("aria-pressed", "true");
+        setTimeout(() => { step++; step < QUESTIONS.length ? renderQuestion() : renderResult(); }, 180);
+      });
+      list.append(b);
+    });
+    body.append(list);
+    const foot = el("div", { class: "audit-foot" });
+    const back = el("button", { type: "button", class: "link-btn", id: "back-btn" }, "← Question précédente");
+    back.disabled = step === 0;
+    back.addEventListener("click", () => { step--; renderQuestion(); });
+    foot.append(back, el("span", { class: "note" }, "Environ 20 secondes par question"));
+    body.append(foot);
+  }
+
+  function compute() {
+    const mult = QUESTIONS[1].choices[answers.equipe].mult;
+    const perCat = {};
+    let total = 0;
+    QUESTIONS.filter(q => q.cat).forEach(q => {
+      const h = q.choices[answers[q.id]].h * mult;
+      perCat[q.cat] = h; total += h;
+    });
+    const lost = Math.min(15, Math.round(total * 2) / 2);
+    const recoverable = Math.round(lost * 0.75 * 2) / 2;
+    const days = Math.round(recoverable * 46 / 7);
+    const priorities = Object.entries(perCat).sort((a, b) => b[1] - a[1]).filter(([, h]) => h >= 1).slice(0, 3).map(([c]) => c);
+    const lowVisibility = QUESTIONS[5].choices[answers.reseaux].vis;
+    if (lowVisibility && !priorities.includes("visibilite")) priorities.splice(Math.min(2, priorities.length), 0, "visibilite");
+    return { perCat, lost, recoverable, days, priorities: priorities.slice(0, 3) };
+  }
+
+  let lastResult = null;
+
+  function renderResult() {
+    const r = lastResult = compute();
+    stepLabel.textContent = "Votre estimation";
+    fill.style.width = "100%";
+    const maxH = Math.max(...Object.values(r.perCat), 1);
+    const bars = Object.entries(r.perCat).map(([c, h]) => `
+      <div class="bar"><span>${CATS[c].label}</span>
+        <span class="track"><span class="fill" style="width:${Math.round(h / maxH * 100)}%"></span></span>
+        <span class="v">${h.toFixed(1).replace(".", ",")} h</span></div>`).join("");
+    const prio = r.priorities.length
+      ? `<div class="prio"><h3>Vos chantiers prioritaires</h3><ul>${r.priorities.map(c => `<li>${CATS[c].tip}</li>`).join("")}</ul></div>`
+      : `<div class="prio"><h3>Vous êtes déjà bien organisé</h3><ul><li>Il reste sûrement quelques gains ciblés : parlons-en lors de l'échange de 30 minutes.</li></ul></div>`;
+
+    body.innerHTML = `
+      <div class="result">
+        <p class="eyebrow">Temps passé chaque semaine sur des tâches répétitives</p>
+        <div class="big"><b class="num">${fmt(r.lost)} h</b><span>dont environ <strong>${fmt(r.recoverable)} h</strong> automatisables, soit <strong>${r.days} jours</strong> de travail par an.</span></div>
+        <div class="bars">${bars}</div>
+        ${prio}
+        <p class="note">Estimation indicative, basée sur vos réponses et sur des temps moyens observés chez des TPE et PME.</p>
+      </div>
+      <form class="lead-form" id="lead-form" novalidate>
+        <h3>Recevez votre plan d'action détaillé sous 48 h</h3>
+        <div class="row2">
+          <label class="f" for="f-prenom">Prénom<input type="text" id="f-prenom" name="prenom" autocomplete="given-name" required></label>
+          <label class="f" for="f-entreprise">Entreprise<input type="text" id="f-entreprise" name="entreprise" autocomplete="organization" required></label>
+        </div>
+        <div class="row2">
+          <label class="f" for="f-email">E-mail<input type="email" id="f-email" name="email" autocomplete="email" required></label>
+          <label class="f" for="f-tel">Téléphone <span style="font-weight:400;color:var(--ink-soft)">(facultatif)</span><input type="tel" id="f-tel" name="telephone" autocomplete="tel"></label>
+        </div>
+        <label class="consent" for="f-consent"><input type="checkbox" id="f-consent" name="consentement" required>
+          <span>J'accepte que Khertyx utilise ces informations pour m'envoyer mon plan d'action. Pas de revente, suppression sur simple demande.</span></label>
+        <button class="btn ochre" type="submit" id="f-submit">Recevoir mon plan gratuit</button>
+        <div id="form-msg" hidden></div>
+        <button type="button" class="link-btn" id="redo-btn">Refaire l'audit</button>
+      </form>`;
+
+    document.getElementById("redo-btn").addEventListener("click", resetAudit);
+    document.getElementById("lead-form").addEventListener("submit", onSubmit);
+  }
+
+  function fmt(n) { return String(n).replace(".", ","); }
+
+  function showMsg(text, isErr) {
+    const m = document.getElementById("form-msg");
+    m.className = "form-msg" + (isErr ? " err" : "");
+    m.textContent = text; m.hidden = false;
+  }
+
+  async function onSubmit(e) {
+    e.preventDefault();
+    const f = e.target;
+    const data = Object.fromEntries(new FormData(f));
+    if (!data.prenom || !data.entreprise) return showMsg("Indiquez votre prénom et le nom de votre entreprise.", true);
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(data.email || "")) return showMsg("L'adresse e-mail semble incomplète. Vérifiez-la pour recevoir votre plan.", true);
+    if (!f.consentement.checked) return showMsg("Cochez la case d'accord pour que l'on puisse vous envoyer votre plan.", true);
+
+    const payload = {
+      ...data, consentement: true, date: new Date().toISOString(),
+      reponses: Object.fromEntries(QUESTIONS.map(q => [q.id, q.choices[answers[q.id]].label])),
+      heures_perdues: lastResult.lost, heures_automatisables: lastResult.recoverable,
+      priorites: lastResult.priorities.map(c => CATS[c].label)
+    };
+
+    if (!WEBHOOK_URL) {
+      console.log("Demande d'audit (mode démo)", payload);
+      return showMsg("Mode démonstration : le formulaire n'est pas encore relié. Branchez le webhook Make pour recevoir les demandes.", true);
+    }
+    const btn = document.getElementById("f-submit");
+    btn.disabled = true; btn.textContent = "Envoi en cours…";
+    try {
+      const res = await fetch(WEBHOOK_URL, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(payload) });
+      if (!res.ok) throw new Error(res.status);
+      f.querySelectorAll("input, button[type=submit]").forEach(n => n.disabled = true);
+      btn.textContent = "Demande reçue";
+      showMsg(`Merci ${data.prenom} ! Votre plan d'action arrive par e-mail sous 48 h ouvrées.`);
+    } catch (err) {
+      btn.disabled = false; btn.textContent = "Recevoir mon plan gratuit";
+      showMsg("L'envoi n'a pas abouti. Vérifiez votre connexion puis réessayez.", true);
+    }
+  }
+
+  function resetAudit() {
+    Object.keys(answers).forEach(k => delete answers[k]);
+    step = 0; renderQuestion();
+  }
+
+  document.getElementById("restart-cta").addEventListener("click", () => { if (step >= QUESTIONS.length) resetAudit(); });
+  document.addEventListener("keydown", e => {
+    if (step >= QUESTIONS.length || /input|textarea/i.test(document.activeElement.tagName)) return;
+    const i = "abcd".indexOf(e.key.toLowerCase());
+    const b = document.getElementById(`c-${QUESTIONS[step].id}-${i}`);
+    if (b) b.click();
+  });
+
+  renderQuestion();
+</script>
